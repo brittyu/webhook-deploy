@@ -49,9 +49,9 @@ class Github implements Hook
 
     public function makeLog($msg = "", $type = 'INFO')
     {
-        $base_dir = $this->config->base_dir;
+        $base_dir = $this->config['base_dir'];
 
-        $log_name = $base_dir . $this->config['log_name'];
+        $log_name = $base_dir . '/' . $this->config['log_name'];
 
         if (! file_exists($log_name)) {
             file_put_contents($log_name, '');
@@ -75,13 +75,13 @@ class Github implements Hook
             return;
         }
 
-        $code_dir = $this->config[$this->name];
+        $path = $this->config[$this->name]['path'];
 
         try {
-            chdir($code_dir);
+            chdir($path);
 
-            exec('git reset --hard HEAD', $output);
-            exec('git pull '. $this->config[$this->name]['remote'] . ' ' . $this->config[$this->name]['branch'], $output);
+            echo shell_exec('sudo git reset --hard HEAD');
+            echo shell_exec('sudo git pull '. $this->config[$this->name]['remote'] . ' ' . $this->config[$this->name]['branch'] . ' 2>&1');
 
             $msg = 'git pull about ' . $this->name . ' success';
             $this->makeLog($msg);

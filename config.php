@@ -3,11 +3,11 @@
 return $config =  [
     'base_dir' => __DIR__,
     'log_name' => 'webhook.log',
-    'your-repo-name' => [
-        'remote' => "orgin",
-        'branch' => 'which-branch',
-        'path' => '/path/to/your/code',
-        'secrect' => ''
+    'xiestorewebhook' => [
+        'remote' => "origin",
+        'branch' => 'master',
+        'path' => '/var/www/html/xiestorewebhook/',
+        'secrect' => 'hellolinux'
     ]
 ];
 
