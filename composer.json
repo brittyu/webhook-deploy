@@ -1,0 +1,17 @@
+{
+    "name": "brittyu/webhook-deploy",
+    "description": "github webhook with php",
+    "authors": [
+        {
+            "name": "brittyu",
+            "email": "yu.britt@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-0": {
+        "Webhook": "src/"
+      }
+    }
+}
