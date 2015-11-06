@@ -19,6 +19,12 @@ class Github implements Hook
     private $post_data;
 
     /**
+     * All post data 
+     *
+     * @var string
+     */
+    private $json_data;
+    /**
      * The repository name
      *
      * @var string
@@ -45,7 +51,9 @@ class Github implements Hook
 
         $this->config = $config;
 
-        $this->post_data = $object->resolve();
+        $this->json_data = $object->getPost();
+
+        $this->post_data = $object->resolve($json_data);
 
         $this->name = $this->post_data->repository->name;
 
@@ -67,7 +75,7 @@ class Github implements Hook
         list($algo, $hash) = explode("=", $this->signature, 2);
 
         $secret = $this->config[$this->name]['secret'];
-        $post_data_hash = hash_hmac($algo, $this->post_data, $secret);
+        $post_data_hash = hash_hmac($algo, $this->json_data, $secret);
 
         if ($hash != $post_data_hash) {
             return false;

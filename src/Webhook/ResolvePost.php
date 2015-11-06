@@ -9,22 +9,31 @@ class ResolvePost
         //
     }
 
+    /**
+     * Get the post data
+     *
+     * @return string
+     */
+    public function getPost()
+    {
+        return file_get_contents('php://input');
+    }
+
 
     /**
      * Resolver the post data from github
      *
-     * @return object|null
+     * @return array
      */
-    public function resolve()
+    public function resolve($string_data)
     {
-        $post_data = file_get_contents('php://input');
-        if ($post_data != "") {
-            $object_data = json_decode($post_data);
+        if ($string_data != "") {
+            $array_data = json_decode($string_data, true);
 
-            return $object_data;
+            return $array_data;
         }
 
-        return null;
+        return [];
     }
 
     /**
