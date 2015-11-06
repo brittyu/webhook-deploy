@@ -7,7 +7,7 @@ return $config =  [
         'remote' => "origin",
         'branch' => 'master',
         'path' => '/your/server/path/',
-        'secrect' => 'your-key'
+        'secret' => 'your-key'
     ]
 ];
 
