@@ -4,17 +4,41 @@ namespace Webhook;
 
 class Github implements Hook
 {
-
+    /*
+     * Store your config
+     *
+     * @var array
+     */
     private $config = [];
 
+    /**
+     * The data from github with post method
+     *
+     * @var object
+     */
     private $post_data;
 
+    /**
+     * The repository name
+     *
+     * @var string
+     */
     private $name;
 
+    /**
+     * Define the log's date format
+     *
+     * @var string
+     */
     private $date_format = 'Y-m-d H:i:sP';
 
-    private $header = [];
-
+    /**
+     * Initialize some variables
+     *
+     * @param array $config
+     * @param ResolvePost $object
+     * @return void
+     */
     public function __construct($config, ResolvePost $object)
     {
         date_default_timezone_set('Asia/Chongqing');
@@ -29,6 +53,11 @@ class Github implements Hook
 
     }
 
+    /**
+     * Validate the repo name and check the secret
+     *
+     * @return bool
+     */
     public function validate()
     {
         if (! isset($this->config[$this->name])) {
@@ -37,9 +66,10 @@ class Github implements Hook
 
         list($algo, $hash) = explode("=", $this->signature, 2);
 
+        $secret = $this->config[$this->name]['secret'];
         $post_data_hash = hash_hmac($algo, $this->post_data, $secret);
 
-        if ($this->config[$this->name]['secret'] != $post_data_hash) {
+        if ($hash != $post_data_hash) {
             return false;
         }
 
@@ -47,6 +77,13 @@ class Github implements Hook
 
     }
 
+    /**
+     * Log process
+     *
+     * @param string $msg
+     * $param string $type
+     * @return void
+     */
     public function makeLog($msg = "", $type = 'INFO')
     {
         $base_dir = $this->config['base_dir'];
@@ -64,11 +101,16 @@ class Github implements Hook
 
     }
 
+    /**
+     * Get data from github
+     *
+     * @return void
+     */
     public function execute()
     {
         $is_legal = $this->validate();
 
-        if (! $is_legal) {
+        if ($is_legal == false) {
             $msg = " secret isn't currect or name not found";
             $this->makeLog($msg, "ERROR");
 
@@ -76,12 +118,18 @@ class Github implements Hook
         }
 
         $path = $this->config[$this->name]['path'];
+        $remote = $this->config[$this->name]['remote'];
+        $branch = $this->config[$this->name]['branch'];
 
+        // begin get the data from github
+        // use shell_exec to execute command
         try {
+
+            // modify the script execution paths
             chdir($path);
 
             echo shell_exec('sudo git reset --hard HEAD');
-            echo shell_exec('sudo git pull '. $this->config[$this->name]['remote'] . ' ' . $this->config[$this->name]['branch'] . ' 2>&1');
+            echo shell_exec('sudo git pull ' . $remote . ' ' . $branch . ' 2>&1');
 
             $msg = 'git pull about ' . $this->name . ' success';
             $this->makeLog($msg);

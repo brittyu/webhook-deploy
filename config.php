@@ -6,8 +6,8 @@ return $config =  [
     'xiestorewebhook' => [
         'remote' => "origin",
         'branch' => 'master',
-        'path' => '/var/www/html/xiestorewebhook/',
-        'secrect' => 'hellolinux'
+        'path' => '/your/server/path/',
+        'secrect' => 'your-key'
     ]
 ];
 

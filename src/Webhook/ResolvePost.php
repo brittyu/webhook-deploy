@@ -11,7 +11,7 @@ class ResolvePost
 
 
     /**
-     * resolver the post data from github
+     * Resolver the post data from github
      *
      * @return object|null
      */
@@ -27,6 +27,11 @@ class ResolvePost
         return null;
     }
 
+    /**
+     * Get the X-Hub-Signature data
+     *
+     * @return string
+     */
     public function getSignature()
     {
         return $_SERVER['X-Hub-Signature'];
