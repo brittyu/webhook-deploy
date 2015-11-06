@@ -2,12 +2,12 @@
 
 namespace Webhook;
 
-interface webhook
+interface Hook
 {
     /**
      * validate the config
      *
-     * @return void
+     * @return Booler
      */
     public function validate();
 

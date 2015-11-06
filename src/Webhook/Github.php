@@ -2,9 +2,7 @@
 
 namespace Webhook;
 
-use webhook;
-
-class Github implements Webhook
+class Github implements Hook
 {
 
     private $config = [];
@@ -19,13 +17,15 @@ class Github implements Webhook
 
     public function __construct($config, ResolvePost $object)
     {
+        date_default_timezone_set('Asia/Chongqing');
+
         $this->config = $config;
 
         $this->post_data = $object->resolve();
 
         $this->name = $this->post_data->repository->name;
 
-        $this->header = $object->getHeader();
+        $this->signature = $object->getSignature();
 
     }
 
@@ -35,9 +35,7 @@ class Github implements Webhook
             return false;
         }
 
-        $signature = $this->header['X-Hub-Signature'];
-
-        list($algo, $hash) = explode("=", $signature, 2);
+        list($algo, $hash) = explode("=", $this->signature, 2);
 
         $post_data_hash = hash_hmac($algo, $this->post_data, $secret);
 
@@ -53,15 +51,16 @@ class Github implements Webhook
     {
         $base_dir = $this->config->base_dir;
 
-        $log_name = $base . $this->config['log_name'];
+        $log_name = $base_dir . $this->config['log_name'];
 
         if (! file_exists($log_name)) {
-            exec("touch $log_name");
+            file_put_contents($log_name, '');
 
             chmod($log_name, 0666);
         }
 
-        file_put_contents($log_name, date($this->data_format) . $type . $msg. PHP_EOL, FILE_APPEND);
+        $msg_string = date($this->date_format) . ': ' . $type . $msg . PHP_EOL;
+        file_put_contents($log_name, $msg_string, FILE_APPEND);
 
     }
 
@@ -70,8 +69,8 @@ class Github implements Webhook
         $is_legal = $this->validate();
 
         if (! $is_legal) {
-            $msg = "secret isn't currect or name not found";
-            $this->log($msg, "ERROR");
+            $msg = " secret isn't currect or name not found";
+            $this->makeLog($msg, "ERROR");
 
             return;
         }
@@ -85,10 +84,10 @@ class Github implements Webhook
             exec('git pull '. $this->config[$this->name]['remote'] . ' ' . $this->config[$this->name]['branch'], $output);
 
             $msg = 'git pull about ' . $this->name . ' success';
-            $this->log($msg);
+            $this->makeLog($msg);
 
         } catch (Exception $e) {
-            $this->log($e->getMessage(), 'ERROR');
+            $this->makeLog($e->getMessage(), 'ERROR');
         }
 
     }

@@ -1,8 +1,8 @@
 <?php
 
-$config =  [
+return $config =  [
     'base_dir' => __DIR__,
-    'log_file' => 'webhook.log',
+    'log_name' => 'webhook.log',
     'your-repo-name' => [
         'remote' => "orgin",
         'branch' => 'which-branch',

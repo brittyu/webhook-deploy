@@ -1,10 +1,11 @@
 <?php
 
-require_once 'config.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Webhook\Github;
-use Webhook\ResoverPost;
+use Webhook\ResolvePost;
 
-$webhook = new Github($config, ResoverPost::class);
+$config = require_once 'config.php';
+
+$webhook = new Github($config, new ResolvePost);
 $webhook->execute();

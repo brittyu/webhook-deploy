@@ -2,11 +2,8 @@
 
 namespace Webhook;
 
-class ResolverPost
+class ResolvePost
 {
-
-    $header = [];
-
     public function __construct()
     {
         //
@@ -18,7 +15,7 @@ class ResolverPost
      *
      * @return object|null
      */
-    public function resolver()
+    public function resolve()
     {
         $post_data = file_get_contents('php://input');
         if ($post_data != "") {
@@ -30,8 +27,8 @@ class ResolverPost
         return null;
     }
 
-    public function getHeader()
+    public function getSignature()
     {
-        return getAllHeaders();
+        return $_SERVER['X-Hub-Signature'];
     }
 }
