@@ -1,6 +1,7 @@
 {
     "name": "brittyu/webhook-deploy",
     "description": "github webhook with php",
+    "license": "MIT",
     "authors": [
         {
             "name": "brittyu",
@@ -8,7 +9,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+      "php": ">=5.4.0"
+    },
     "autoload": {
       "psr-0": {
         "Webhook": "src/"
