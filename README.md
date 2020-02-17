@@ -7,7 +7,7 @@ github的hook发送一个post请求给设置好的url，
 #### 使用方法
 
   通过composer安装
-  
+
 ```bash
 {
 	"require": {
@@ -17,7 +17,7 @@ github的hook发送一个post请求给设置好的url，
 ```
 
 添加自己的配置文件config.php
-	
+
 ```bash
 <?php
 
@@ -35,7 +35,7 @@ return $config =  [
 ```
 
 添加启动脚本
-	
+
 ```bash
 <?php
 
